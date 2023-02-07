@@ -2,6 +2,8 @@ import requests
 import json
 import pandas as pd
 
+pd.read_json('@opensky-network.org/api/states/all')
+
 longmin, latmin=1,2
 longmax, latmax=1,2
 username=""
@@ -29,9 +31,9 @@ def flight_tracking(doc):
         'baro_altitude':[],'on_ground':[],'velocity':[],'true_track':[],
         'vertical_rate':[],'sensors':[],'geo_altitude':[],'squawk':[],'spi':[],'position_source':[],'x':[],'y':[],
         'rot_angle':[],'url':[]
-
+      
     }
-            
+                                    )      
 #origin_country = 'origin_country'
  #Country = input("Countryname: ")
   
@@ -52,4 +54,4 @@ def flight_tracking(doc):
 #country = origin_country
 #for i in (response):
 #  country = i
-
+                                    
