@@ -1,39 +1,54 @@
 import requests
 import json
 import pandas as pd
+import http.client
+#pd.read_json('@opensky-network.org/api/states/all')
 
-pd.read_json('@opensky-network.org/api/states/all')
 
-longmin, latmin=1,2
-longmax, latmax=1,2
-username=""
-password=""
+conn = http.client.HTTPSConnection("airport-info.p.rapidapi.com")
 
-urldata = 'https://'+username+':'+password+'@opensky-network.org/api/states/all?'+'lamin='+str(latmin)+'&lomin='+str(longmin)+'&lamax='+str(latmax)+'&lomax='+str(longmax)
-response = requests.get(urldata).json()
+headers = {
+    'X-RapidAPI-Key': "5a89e79fe4msh7410d61b0054b56p1bff01jsn662d1919dcf9",
+    'X-RapidAPI-Host': "airport-info.p.rapidapi.com"
+    }
+
+conn.request("GET", "/airport?iata=JFK&icao=KJFK", headers=headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+
+#response = requests.get("airport-info.p.rapidapi.com")
+#planes = response.json()
+#print(response.text)
+
+#requests.get("https://samples.adsbexchange.com/traces/2022/05/01/00/")
+#print(response.text)
+
+#urldata = 'https://'+username+':'+password+'@opensky-network.org/api/states/all?'+'lamin='+str(latmin)+'&lomin='+str(longmin)+'&lamax='+str(latmax)+'&lomax='+str(longmax)
+#response = requests.get(urldata).json()
 
 name = ['icao24','callsign','origin_country','time_position','last_contact','long','lat','baro_altitude','on_ground','velocity',     'true_track','vertical_rate','sensors','geo_altitude','squawk','spi','position_source']
 
-flight_df=pd.DataFrame(response['states'])
-flight_df=flight_df.loc[:,0:16]
-flight_df.columns=name
-flight_df=flight_df.fillna('No Data')
-flight_df.head()
+#flight_df=pd.DataFrame(response['states'])
+#flight_df=flight_df.loc[:,0:16]
+#flight_df.columns=name
+#flight_df=flight_df.fillna('No Data')
+#flight_df.head()
 
 
-print(response)
 
-def flight_tracking(doc):
+#def flight_tracking(doc):
     
-    flight_source = ColumnDataSource({
-        'icao24':[],'callsign':[],'origin_country':[],
-        'time_position':[],'last_contact':[],'long':[],'lat':[],
-        'baro_altitude':[],'on_ground':[],'velocity':[],'true_track':[],
-        'vertical_rate':[],'sensors':[],'geo_altitude':[],'squawk':[],'spi':[],'position_source':[],'x':[],'y':[],
-        'rot_angle':[],'url':[]
+#    flight_source = ColumnDataSource({
+ #      'time_position':[],'last_contact':[],'long':[],'lat':[],
+  #      'baro_altitude':[],'on_ground':[],'velocity':[],'true_track':[],
+   #     'vertical_rate':[],'sensors':[],'geo_altitude':[],'squawk':[],'spi':[],'position_source':[],'x':[],'y':[],
+    #    'rot_angle':[],'url':[]
       
-    }
-                                    )      
+    #}
+     #                               )      
 #origin_country = 'origin_country'
  #Country = input("Countryname: ")
   
