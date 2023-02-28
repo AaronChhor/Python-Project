@@ -1,63 +1,42 @@
 import pandas as pd
 
-# Read the files and import all rows.
+
 df_18 = pd.read_csv('delays_2018.csv')
-#df_19 = pd.read_csv('delays_2019.csv')
+df_19 = pd.read_csv('delays_2019.csv')
 
-# Concatenate the 2018 and 2019 data into a single DataFrame.
-df = pd.concat([df_18,], ignore_index=True)
 
-# Print out the number of rows imported from the files.
-print('Number of Rows: ' + str(len(df_18)))
+df = pd.concat([df_18, df_19], ignore_index=True)
 
-# Change the data type of the 'month' column to date and change the format to YYYY-M (e.g. 2018-1).
+print('Number of Rows: ' + str(len(df_18)+len(df_19)))
+
 df['date'] = pd.to_datetime(df['date'], format='%Y-%m').dt.strftime('%Y-%m')
 
-# Remove rows containing invalid data.
 df = df[(df['date'] >= '2018-01') & (df['date'] <= '2019-12') & (df['arr_flights'].notnull())
               & (df['carrier'].notnull()) & (df['carrier_name'].notnull()) 
               & (df['airport'].notnull()) & (df['airport_name'].notnull())]
 
-# Print out the number of rows remaining in the dataset.
 print('Number of Rows: ' + str(len(df)))
 
-# Identify the airports in the state of Tennessee.
 df['TN'] = df['airport_name'].apply(lambda x: x.find('TN'))
 
-# Create a set of airport names (to eliminate the duplicates).
 airports = set(df[df['TN'] != -1]['airport_name'])
 
-# Display the list of airports.
 print('Tennessee Airports:')
 print(airports)
 
-# Read the coordinates file and import all rows.
 df_coords = pd.read_csv('airport_coordinates.csv')
 
-# Create a new DataFrame with airport codes and names.
 df_airports = df[['airport', 'airport_name']].drop_duplicates().reset_index(drop=True)
 
-# Merge the coordinates DataFrame with the airports DataFrame.
 df_airports = pd.merge(df_airports, df_coords, on='airport')
 
-# This code was required due to an Anaconda issue.  You may not need it depending on your environment.
-import os
-os.environ["PROJ_LIB"] = "C:\\Users\\Nick\\anaconda3\\envs\\sandbox\\Library\\share\\basemap";
+pd.crosstab(df['carrier'], df['airport'], values=df['arr_diverted'], aggfunc='sum').fillna('')
+df_f = df[(df['date'] >= '2019-01') & (df['date'] <= '2019-12') & (df['airport'] == 'JFK') 
+          & (df['carrier_ct'] > 0) & (df['weather_ct'] > 0)]
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
 
-# Ready the Basemap for display.
-fig = plt.figure(figsize=(16, 16))
-m = Basemap(llcrnrlon=-119,llcrnrlat=22,urcrnrlon=-64,urcrnrlat=49,
-        projection='lcc',lat_1=32,lat_2=45,lon_0=-95)
+print("Number of Delays: " + str(df_f['carrier_ct'].sum()  + df_f['weather_ct'].sum()))
 
-# Load the shapefile to display the outlines of the US states.
-m.readshapefile('st99_d00', name='states', drawbounds=True)
-
-# Plot the airports on the map.
-m.scatter(df_airports['long'].values, df_airports['lat'].values, latlon=True)
-plt.show()
 
 #response = requests.get("airport-info.p.rapidapi.com")
 #planes = response.json()
