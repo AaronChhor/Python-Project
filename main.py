@@ -17,11 +17,14 @@ df = df[(df['date'] >= '2018-01') & (df['date'] <= '2019-12') & (df['arr_flights
 print('Number of Rows: ' + str(len(df)))
 
 df['TN'] = df['airport_name'].apply(lambda x: x.find('TN'))
+df['NY'] = df['airport_name'].apply(lambda x: x.find('NY'))
 
-airports = set(df[df['TN'] != -1]['airport_name'])
+airports_TN = set(df[df['TN'] != -1]['airport_name'])
+airports_NY = set(df[df['NY'] != -1]['airport_name'])
 
 print('Tennessee Airports:')
-print(airports)
+print(airports_TN)
+print(airports_NY)
 
 flight_coords = pd.read_csv('coords.csv')
 
