@@ -1,13 +1,12 @@
 import pandas as pd
 
+flights_2018 = pd.read_csv('delay_2018.csv')
+flights_2019= pd.read_csv('delay_2019.csv')
 
-df_18 = pd.read_csv('delays_2018.csv')
-df_19 = pd.read_csv('delays_2019.csv')
 
+df = pd.concat([flights_2018, flights_2019], ignore_index=True)
 
-df = pd.concat([df_18, df_19], ignore_index=True)
-
-print('Number of Rows: ' + str(len(df_18)+len(df_19)))
+print('Number of Rows: ' + str(len(flights_2018)+len(flights_2019)))
 
 df['date'] = pd.to_datetime(df['date'], format='%Y-%m').dt.strftime('%Y-%m')
 
@@ -24,18 +23,18 @@ airports = set(df[df['TN'] != -1]['airport_name'])
 print('Tennessee Airports:')
 print(airports)
 
-df_coords = pd.read_csv('airport_coordinates.csv')
+flight_coords = pd.read_csv('coords.csv')
 
-df_airports = df[['airport', 'airport_name']].drop_duplicates().reset_index(drop=True)
+flight_airports = df[['airport', 'airport_name']].drop_duplicates().reset_index(drop=True)
 
-df_airports = pd.merge(df_airports, df_coords, on='airport')
+df_airports = pd.merge(flight_airports, flight_coords, on='airport')
 
 pd.crosstab(df['carrier'], df['airport'], values=df['arr_diverted'], aggfunc='sum').fillna('')
-df_f = df[(df['date'] >= '2019-01') & (df['date'] <= '2019-12') & (df['airport'] == 'JFK') 
+flights_f = df[(df['date'] >= '2019-01') & (df['date'] <= '2019-12') & (df['airport'] == 'JFK') 
           & (df['carrier_ct'] > 0) & (df['weather_ct'] > 0)]
 
 
-print("Number of Delays: " + str(df_f['carrier_ct'].sum()  + df_f['weather_ct'].sum()))
+print("Number of Delays: " + str(flights_f['carrier_ct'].sum()  + flights_f['weather_ct'].sum()))
 
 
 #response = requests.get("airport-info.p.rapidapi.com")
