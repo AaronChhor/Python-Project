@@ -38,13 +38,15 @@ Spirit_avg = Spirit_airlines/Rows
 #Find Average minutes of delay
 key = 'Spirit Air Lines'
 Avg_Spirit_del = 0
-Avg_Spirit_Count = 0
+Avg_Spirit_count = 0
 for i in df.values:
   if i == key:
     Avg_Spirit_del+= 'arr_delay'
-    Avg_Spirit_Count+=1
-Avg_Spirit_del/=Avg_Spirit_Count
-print(Avg_Spirit_del)
+    Avg_Spirit_count+=1
+
+if Avg_Spirit_count>0:
+  Avg_Spirit_del/=Avg_Spirit_count
+  print(Avg_Spirit_del)
 
     
     
