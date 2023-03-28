@@ -1,8 +1,14 @@
 import pandas as pd
 
 df = pd.read_csv('airline_delay_causes.csv')
-#flights_2018 = pd.read_csv('delay_2018.csv')
-#flights_2019= pd.read_csv('delay_2019.csv')
+#df.head(3)
+#df["arr_delay"].head()
+Spirit_df= df[ df['region']=="Spirit Air Lines"]
+Spirit_df.head()
+Spirit_df.index
+Spirit_df.set_index("Year", inplace=True)
+Spirit_df.plot()
+
 
 print('Number of Rows: ' + str(len(df)))
 Rows=int(str(len(df)))
@@ -15,17 +21,15 @@ df = df[(df['year'] >= '2016') & (df['arr_flights'].notnull())
 
 #print('Number of Rows: ' + str(len(df)))
 
-#print(df.values)
-print(df.keys)
+print(df.values)
+#print(df.keys)
 #spirit_airlines = 0
 #for x in df:
-  #      spirit_airlines = spirit_airlines+1
-     #print("Number of Spirit Airlines airports: " + spirit_airlines)
+#        spirit_airlines = spirit_airlines+1
+#     print("Number of Spirit Airlines airports: " + #spirit_airlines)
 #print(spirit_airlines)
 
 #for i in df.keys():
- # print
-
 key = "Spirit Air Lines"
 Spirit_airlines = 0
 for i in df.values:
@@ -43,12 +47,12 @@ for i in df.values:
   if i == key:
     Avg_Spirit_del+= 'arr_delay'
     Avg_Spirit_count+=1
-
-if Avg_Spirit_count>0:
-  Avg_Spirit_del/=Avg_Spirit_count
-  print(Avg_Spirit_del)
-
     
+#if Avg_Spirit_count>0:
+#  Avg_Spirit_del/=Avg_Spirit_count
+#  print(Avg_Spirit_del)
+
+
     
 
 #print("Number of Delays: " + str(flights_f['carrier_ct'].sum()  + flights_f['weather_ct'].sum()))
